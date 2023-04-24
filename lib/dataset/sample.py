@@ -53,8 +53,8 @@ class SampleDataset(Dataset):
         gt_db = []
         for img in tqdm(os.listdir(self.img_root)):
             image_path = os.path.join(self.img_root,img)
-            lane_path = os.path.join(self.lane_root,os.path.basename(img)[:-10]+'000000.jpg')
-            mask_path = os.path.join(self.mask_root,os.path.basename(img)[:-10]+'000000.jpg')
+            lane_path = os.path.join(self.lane_root,os.path.basename(img)[:-10]+'000000.png')
+            mask_path = os.path.join(self.mask_root,os.path.basename(img)[:-10]+'000000.png')
             gt = []
             rec = [{
                 'image': image_path,

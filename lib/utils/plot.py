@@ -53,6 +53,8 @@ def show_seg_result(img, result, index, epoch, save_dir=None, is_ll=False,palett
     # convert to BGR
     color_seg = color_seg[..., ::-1]
     # print(color_seg.shape)
+    # print(img.shape)
+
     color_mask = np.mean(color_seg, 2)
     img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
     # img = img * 0.5 + color_seg * 0.5

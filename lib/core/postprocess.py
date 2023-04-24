@@ -38,7 +38,7 @@ def build_targets(cfg, predictions, targets, model):
                         ], device=targets.device).float() * g  # offsets
     
     for i in range(det.nl):
-        anchors = det.anchors[i] #[3,2]
+        anchors, shape = det.anchors[i] , predictions[i].shape#[3,2]
         gain[2:6] = torch.tensor(predictions[i].shape)[[3, 2, 3, 2]]  # xyxy gain
         # Match targets to anchors
         t = targets * gain
@@ -71,7 +71,8 @@ def build_targets(cfg, predictions, targets, model):
 
         # Append
         a = t[:, 6].long()  # anchor indices
-        indices.append((b, a, gj.clamp_(0, gain[3] - 1), gi.clamp_(0, gain[2] - 1)))  # image, anchor, grid indices
+        # indices.append((b, a, gj.clamp_(0, gain[3] - 1), gi.clamp_(0, gain[2] - 1)))  # image, anchor, grid indices
+        indices.append((b, a, gj.clamp_(0, shape[2] - 1), gi.clamp_(0, shape[2] - 1)))  # image, anchor, grid indices
         tbox.append(torch.cat((gxy - gij, gwh), 1))  # box
         anch.append(anchors[a])  # anchors
         tcls.append(c)  # class

@@ -143,7 +143,8 @@ def main():
 
     if rank in [-1, 0]:
         checkpoint_file = os.path.join(
-            os.path.join(cfg.LOG_DIR, cfg.DATASET.DATASET), 'checkpoint.pth'
+            # os.path.join(cfg.LOG_DIR, cfg.DATASET.DATASET), 'checkpoint.pth'
+            os.path.join(final_output_dir), 'checkpoint.pth'
         )
         if os.path.exists(cfg.MODEL.PRETRAINED):
             logger.info("=> loading model '{}'".format(cfg.MODEL.PRETRAINED))
@@ -369,7 +370,8 @@ def main():
                 # 'best_state_dict': model.module.state_dict(),
                 # 'perf': perf_indicator,
                 optimizer=optimizer,
-                output_dir=os.path.join(cfg.LOG_DIR, cfg.DATASET.DATASET),
+                # output_dir=os.path.join(cfg.LOG_DIR, cfg.DATASET.DATASET),
+                output_dir=os.path.join(final_output_dir),
                 filename='checkpoint.pth'
             )
 

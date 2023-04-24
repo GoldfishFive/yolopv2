@@ -599,13 +599,13 @@ YOLOPv2 = [
 [ [60, 63, 66], Detect,  [1, [[3,9,5,11,4,20], [7,18,6,39,12,31], [19,50,38,81,68,157]], [128, 256, 512]]], #Detection head 24 67
 
 [ 50, Conv, [512, 128, 3, 1]],   #25 68
-[ -1, Upsample, [None, 2, 'nearest']],  #26 69
+[ -1, Upsample, [None, 4, 'nearest']],  #26 69  upsample rate 4
 [ -1, BottleneckCSP, [128, 64, 1, False]],  #27 70
 [ -1, Conv, [64, 32, 3, 1]],    #28 71
-[ -1, Upsample, [None, 2, 'nearest']],  #29 72
+[ -1, Upsample, [None, 4, 'nearest']],  #29 72   upsample rate 4
 [ -1, Conv, [32, 16, 3, 1]],    #30 73
 [ -1, BottleneckCSP, [16, 8, 1, False]],    #31 74
-[ -1, Upsample, [None, 2, 'nearest']],  #32 75
+[ -1, Upsample, [None, 2, 'nearest']],  #32 75   upsample rate 2
 [ -1, Conv, [8, 2, 3, 1]], #33 76 Driving area segmentation head
 
 [ 59, Conv, [640, 128, 3, 1]],   #34 77

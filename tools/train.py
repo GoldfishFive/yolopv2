@@ -21,8 +21,8 @@ from lib.utils import DataLoaderX, torch_distributed_zero_first
 from tensorboardX import SummaryWriter
 
 import lib.dataset as dataset
-# from lib.config import cfg
-from lib.config import sample_cfg as cfg
+from lib.config import cfg # YOLOP
+# from lib.config import sample_cfg as cfg # YOLOPv2
 
 from lib.config import update_config
 from lib.core.loss import get_loss

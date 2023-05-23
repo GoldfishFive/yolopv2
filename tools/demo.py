@@ -18,7 +18,9 @@ import numpy as np
 import torchvision.transforms as transforms
 import PIL.Image as image
 
-from lib.config import cfg
+# from lib.config import cfg # YOLOP
+from lib.config import sample_cfg as cfg # YOLOPv2
+
 from lib.config import update_config
 from lib.utils.utils import create_logger, select_device, time_synchronized
 from lib.models import get_net
@@ -165,15 +167,18 @@ def detect(cfg,opt):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='/media/database/data4/wjy/projects/YOLOP/tools/runs/BddDataset/_2023-02-22-03-58/epoch-45.pth', help='model.pth path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default='/home/user01/projects/yolopv2/runs/SampleDataset/YOLOPv2/_2023-04-25-01-02/epoch-100.pth', help='model.pth path(s)')
     # parser.add_argument('--source', type=str, default='inference/videos', help='source')  # file/folder   ex:inference/images
     # parser.add_argument('--source', type=str, default='/media/database/data4/wjy/datasets/Segmentation/traffic/G0321K271+820up/', help='source')  # file/folder   ex:inference/images
-    parser.add_argument('--source', type=str, default='/media/database/data4/wjy/datasets/Segmentation/traffic/G35K021+178up/', help='source')  # file/folder   ex:inference/images
+    # parser.add_argument('--source', type=str, default='/home/user01/datasets/traffic/Highway_sample/Non-Vehicle/G1813K105+420up_20230216_065200.mp4', help='source')  # file/folder   ex:inference/images
+    # parser.add_argument('--source', type=str, default='/home/user01/datasets/traffic/Highway_sample_images/G1813K105+420up_20230216_065200.mp4/', help='source')  # file/folder   ex:inference/images
+    parser.add_argument('--source', type=str, default='/home/data/highway/0095/foggy_image_list/', help='source')  # file/folder   ex:inference/images
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
-    parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
-    parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
-    parser.add_argument('--device', default='1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
-    parser.add_argument('--save-dir', type=str, default='inference/G35K021+178up', help='directory to save results')
+    parser.add_argument('--conf-thres', type=float, default=1.1, help='0.001 object confidence threshold')
+    parser.add_argument('--iou-thres', type=float, default=0.6, help='IOU threshold for NMS')
+    parser.add_argument('--device', default='2', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--save-dir', type=str, default='inference/foggy_image_list', help='directory to save results')
+    # parser.add_argument('--save-dir', type=str, default='inference/G1813K105+420up_20230216_065200.mp4_imageslist', help='directory to save results')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--update', action='store_true', help='update all models')
     opt = parser.parse_args()

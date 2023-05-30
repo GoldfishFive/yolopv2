@@ -17,7 +17,7 @@ from tqdm import tqdm
 from ..utils import letterbox_for_img, clean_str
 
 img_formats = ['.bmp', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.dng']
-vid_formats = ['.mov', '.avi', '.mp4', '.mpg', '.mpeg', '.m4v', '.wmv', '.mkv']
+vid_formats = ['.mov', '.avi', '.mp4', '.mpg', '.mpeg', '.m4v', '.wmv', '.mkv', '.ts']
 
 class LoadImages:  # for inference
     def __init__(self, path, img_size=640):
@@ -110,6 +110,9 @@ class LoadImages:  # for inference
 
 
 class LoadStreams:  # multiple IP or RTSP cameras
+    '''
+    RTSP cameras视频流: https://zhuanlan.zhihu.com/p/366528096
+    '''
     def __init__(self, sources='streams.txt', img_size=640, auto=True):
         self.mode = 'stream'
         self.img_size = img_size

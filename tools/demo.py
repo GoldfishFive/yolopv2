@@ -172,12 +172,12 @@ if __name__ == '__main__':
     # parser.add_argument('--source', type=str, default='/media/database/data4/wjy/datasets/Segmentation/traffic/G0321K271+820up/', help='source')  # file/folder   ex:inference/images
     # parser.add_argument('--source', type=str, default='/home/user01/datasets/traffic/Highway_sample/Non-Vehicle/G1813K105+420up_20230216_065200.mp4', help='source')  # file/folder   ex:inference/images
     # parser.add_argument('--source', type=str, default='/home/user01/datasets/traffic/Highway_sample_images/G1813K105+420up_20230216_065200.mp4/', help='source')  # file/folder   ex:inference/images
-    parser.add_argument('--source', type=str, default='/home/data/highway/0095/foggy_image_list/', help='source')  # file/folder   ex:inference/images
+    parser.add_argument('--source', type=str, default='/home/data/highway/0095/rainy/000019.ts', help='source')  # file/folder   ex:inference/images
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=1.1, help='0.001 object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.6, help='IOU threshold for NMS')
     parser.add_argument('--device', default='2', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
-    parser.add_argument('--save-dir', type=str, default='inference/foggy_image_list', help='directory to save results')
+    parser.add_argument('--save-dir', type=str, default='inference/000019.ts', help='directory to save results')
     # parser.add_argument('--save-dir', type=str, default='inference/G1813K105+420up_20230216_065200.mp4_imageslist', help='directory to save results')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--update', action='store_true', help='update all models')

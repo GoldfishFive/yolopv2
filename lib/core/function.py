@@ -258,8 +258,8 @@ def validate(epoch,config, val_loader, val_dataset, model, criterion, output_dir
                 if batch_i == 0:
                     for i in range(test_batch_size):
                         img_test = cv2.imread(paths[i])
-                        if 'S6K185+044down_20230216_083730.mp4' in paths[i]:
-                            img_test = cv2.resize(img_test, (1920,1080), interpolation=cv2.INTER_LINEAR)
+                        # if 'S6K185+044down_20230216_083730.mp4' in paths[i]:
+                        #     img_test = cv2.resize(img_test, (1920,1080), interpolation=cv2.INTER_LINEAR)
                         da_seg_mask = da_seg_out[i][:, pad_h:height-pad_h, pad_w:width-pad_w].unsqueeze(0)
                         da_seg_mask = torch.nn.functional.interpolate(da_seg_mask, scale_factor=int(1/ratio), mode='bilinear')
                         _, da_seg_mask = torch.max(da_seg_mask, 1)
@@ -278,8 +278,8 @@ def validate(epoch,config, val_loader, val_dataset, model, criterion, output_dir
                         _ = show_seg_result(img_test1, da_gt_mask, i, epoch, save_dir, is_gt=True)
 
                         img_ll = cv2.imread(paths[i])
-                        if 'S6K185+044down_20230216_083730.mp4' in paths[i]:
-                            img_ll = cv2.resize(img_ll, (1920,1080), interpolation=cv2.INTER_LINEAR)
+                        # if 'S6K185+044down_20230216_083730.mp4' in paths[i]:
+                        #     img_ll = cv2.resize(img_ll, (1920,1080), interpolation=cv2.INTER_LINEAR)
                         ll_seg_mask = ll_seg_out[i][:, pad_h:height-pad_h, pad_w:width-pad_w].unsqueeze(0)
                         ll_seg_mask = torch.nn.functional.interpolate(ll_seg_mask, scale_factor=int(1/ratio), mode='bilinear')
                         _, ll_seg_mask = torch.max(ll_seg_mask, 1)

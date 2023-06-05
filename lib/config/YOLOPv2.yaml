@@ -1,0 +1,15 @@
+num_seg_class: 3
+MODEL:
+    NAME: 'YOLOPv2'
+DATASET:
+    DATAROOT: "/home/user01/datasets/traffic/Sample_conbined"       # the path of images folder
+    LABELROOT: '/home/user01/datasets/traffic/sample_pre_images_lane_mask/'      # the path of det_annotations folder
+    MASKROOT: '/home/user01/datasets/traffic/sample_pre_images_road_mask_updown/'                # the path of da_seg_annotations folder
+    LANEROOT: '/home/user01/datasets/traffic/sample_pre_images_lane_mask/'               # the path of ll_seg_annotations folder
+
+TRAIN:
+    END_EPOCH: 100
+    BATCH_SIZE_PER_GPU: 16
+
+TEST:
+    BATCH_SIZE_PER_GPU: 8

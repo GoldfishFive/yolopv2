@@ -26,8 +26,7 @@ def show_seg_result(img, result, index, epoch, save_dir=None, is_ll=False,palett
     # img = img.copy()
     # seg = result[0]
     if palette is None:
-        palette = np.random.randint(
-                0, 255, size=(3, 3))
+        palette = np.random.randint(0, 255, size=(3, 3))
     palette[0] = [0, 0, 0]
     palette[1] = [0, 255, 0]
     palette[2] = [255, 0, 0]

@@ -129,10 +129,9 @@ _C.TEST.PLOTS = True
 _C.TEST.NMS_CONF_THRESHOLD  = 0.001
 _C.TEST.NMS_IOU_THRESHOLD  = 0.6
 
-
 def update_config(cfg, args):
     cfg.defrost()
-    # cfg.merge_from_file(args.cfg)
+    cfg.merge_from_file(args.cfg) # update from yaml file
 
     if args.modelDir:
         cfg.OUTPUT_DIR = args.modelDir

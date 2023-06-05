@@ -5,7 +5,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 import pprint
-import time
 import torch
 import torch.nn.parallel
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -17,14 +16,11 @@ import torch.utils.data
 import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import numpy as np
-from lib.utils import DataLoaderX, torch_distributed_zero_first
+from lib.utils import DataLoaderX
 from tensorboardX import SummaryWriter
 
 import lib.dataset as dataset
-from lib.config import cfg # YOLOP
-# from lib.config import sample_cfg as cfg # YOLOPv2
-
-from lib.config import update_config
+from lib.config import cfg,update_config
 from lib.core.loss import get_loss
 from lib.core.function import train
 from lib.core.function import validate
@@ -40,10 +36,11 @@ from lib.utils import run_anchor
 def parse_args():
     parser = argparse.ArgumentParser(description='Train Multitask network')
     # general
-    # parser.add_argument('--cfg',
-    #                     help='experiment configure file name',
-    #                     required=True,
-    #                     type=str)
+    parser.add_argument('--cfg',
+                        help='experiment configure file name',
+                        # required=True,
+                        type=str,
+                        default='lib/config/YOLOPv2.yaml')
     # philly
     parser.add_argument('--modelDir',
                         help='model directory',

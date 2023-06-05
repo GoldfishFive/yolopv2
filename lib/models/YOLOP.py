@@ -606,7 +606,8 @@ YOLOPv2 = [
 [ -1, Conv, [32, 16, 3, 1]],    #30 73
 [ -1, BottleneckCSP, [16, 8, 1, False]],    #31 74
 [ -1, Upsample, [None, 2, 'nearest']],  #32 75   upsample rate 2
-[ -1, Conv, [8, 2, 3, 1]], #33 76 Driving area segmentation head
+# [ -1, Conv, [8, 2, 3, 1]], #33 76 Driving area segmentation head two class
+[ -1, Conv, [8, 3, 3, 1]], #33 76 Driving area segmentation head
 
 [ 59, Conv, [640, 128, 3, 1]],   #34 77
 [ -1, Upsample, [None, 2, 'nearest']],  #35 78

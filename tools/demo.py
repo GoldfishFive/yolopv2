@@ -18,8 +18,8 @@ import numpy as np
 import torchvision.transforms as transforms
 import PIL.Image as image
 
-# from lib.config import cfg # YOLOP
-from lib.config import sample_cfg as cfg # YOLOPv2
+from lib.config import cfg # YOLOP
+# from lib.config import sample_cfg as cfg # YOLOPv2
 
 from lib.config import update_config
 from lib.utils.utils import create_logger, select_device, time_synchronized

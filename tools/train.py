@@ -20,7 +20,7 @@ from lib.utils import DataLoaderX
 from tensorboardX import SummaryWriter
 
 import lib.dataset as dataset
-from lib.config import cfg,update_config
+from lib.config import cfg, update_config
 from lib.core.loss import get_loss
 from lib.core.function import train
 from lib.core.function import validate
@@ -83,7 +83,7 @@ def main():
     # set the logger, tb_log_dir means tensorboard logdir
 
     logger, final_output_dir, tb_log_dir = create_logger(
-        cfg, cfg.LOG_DIR, 'train', rank=rank)
+        cfg, cfg.exp_name, 'train', rank=rank)
 
     if rank in [-1, 0]:
         logger.info(pprint.pformat(args))
@@ -116,22 +116,22 @@ def main():
         dist.init_process_group(backend='nccl', init_method='env://')  # distributed backend
     
     print("load model to device")
-    model = get_net(cfg).to(device)
+    model, m_block_cfg = get_net(cfg)
+    model = model.to(device)
 
     # define loss function (criterion) and optimizer
     criterion = get_loss(cfg, device=device)
     optimizer = get_optimizer(cfg, model)
-
 
     # load checkpoint model
     best_perf = 0.0
     best_model = False
     last_epoch = -1
 
-    Encoder_para_idx = [str(i) for i in range(0, 17)]
-    Det_Head_para_idx = [str(i) for i in range(17, 25)]
-    Da_Seg_Head_para_idx = [str(i) for i in range(25, 34)]
-    Ll_Seg_Head_para_idx = [str(i) for i in range(34,43)]
+    Encoder_para_idx = [str(i) for i in range(0, m_block_cfg[0][0]+1)]
+    Det_Head_para_idx = [str(i) for i in range(m_block_cfg[0][0]+1, m_block_cfg[0][1]+1)]
+    Da_Seg_Head_para_idx = [str(i) for i in range(m_block_cfg[0][1]+1, m_block_cfg[0][2]+1)]
+    Ll_Seg_Head_para_idx = [str(i) for i in range(m_block_cfg[0][2]+1, m_block_cfg[0][3]+1)]
 
     lf = lambda x: ((1 + math.cos(x * math.pi / cfg.TRAIN.END_EPOCH)) / 2) * \
                    (1 - cfg.TRAIN.LRF) + cfg.TRAIN.LRF  # cosine
@@ -140,7 +140,6 @@ def main():
 
     if rank in [-1, 0]:
         checkpoint_file = os.path.join(
-            # os.path.join(cfg.LOG_DIR, cfg.DATASET.DATASET), 'checkpoint.pth'
             os.path.join(final_output_dir), 'checkpoint.pth'
         )
         if os.path.exists(cfg.MODEL.PRETRAINED):
@@ -155,19 +154,6 @@ def main():
                 cfg.MODEL.PRETRAINED, checkpoint['epoch']))
             #cfg.NEED_AUTOANCHOR = False     #disable autoanchor
         
-        if os.path.exists(cfg.MODEL.PRETRAINED_DET):
-            logger.info("=> loading model weight in det branch from '{}'".format(cfg.MODEL.PRETRAINED))
-            det_idx_range = [str(i) for i in range(0,25)]
-            model_dict = model.state_dict()
-            checkpoint_file = cfg.MODEL.PRETRAINED_DET
-            checkpoint = torch.load(checkpoint_file)
-            begin_epoch = checkpoint['epoch']
-            last_epoch = checkpoint['epoch']
-            checkpoint_dict = {k: v for k, v in checkpoint['state_dict'].items() if k.split(".")[1] in det_idx_range}
-            model_dict.update(checkpoint_dict)
-            model.load_state_dict(model_dict)
-            logger.info("=> loaded det branch checkpoint '{}' ".format(checkpoint_file))
-        
         if cfg.AUTO_RESUME and os.path.exists(checkpoint_file):
             logger.info("=> loading checkpoint '{}'".format(checkpoint_file))
             checkpoint = torch.load(checkpoint_file)
@@ -180,7 +166,6 @@ def main():
             logger.info("=> loaded checkpoint '{}' (epoch {})".format(
                 checkpoint_file, checkpoint['epoch']))
             #cfg.NEED_AUTOANCHOR = False     #disable autoanchor
-        # model = model.to(device)
 
         if cfg.TRAIN.SEG_ONLY:  #Only train two segmentation branchs
             logger.info('freeze encoder and Det head...')

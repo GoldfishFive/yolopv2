@@ -13,29 +13,30 @@ from prefetch_generator import BackgroundGenerator
 from contextlib import contextmanager
 import re
 
+
 def clean_str(s):
     # Cleans a string by replacing special characters with underscore _
     return re.sub(pattern="[|@#!¡·$€%&()=?¿^*;:,¨´><+]", repl="_", string=s)
 
-def create_logger(cfg, cfg_path, phase='train', rank=-1):
+
+def create_logger(cfg, exp_name, phase='train', rank=-1):
     # set up logger dir
     dataset = cfg.DATASET.DATASET
     dataset = dataset.replace(':', '_')
     model = cfg.MODEL.NAME
-    cfg_path = os.path.basename(cfg_path).split('.')[0]
 
     if rank in [-1, 0]:
         time_str = time.strftime('%Y-%m-%d-%H-%M')
-        log_file = '{}_{}_{}.log'.format(cfg_path, time_str, phase)
-        # set up tensorboard_log_dir
-        tensorboard_log_dir = Path(cfg.LOG_DIR) / dataset / model / \
-                                  (cfg_path + '_' + time_str)
-        final_output_dir = tensorboard_log_dir
-        if not tensorboard_log_dir.exists():
-            print('=> creating {}'.format(tensorboard_log_dir))
-            tensorboard_log_dir.mkdir(parents=True)
 
-        final_log_file = tensorboard_log_dir / log_file
+        log_file = '{}_{}.log'.format(time_str, phase)
+        # set up tensorboard_log_dir
+        tensorboard_log_dir = Path(cfg.LOG_DIR) / dataset / model / exp_name
+        final_output_dir = tensorboard_log_dir
+        if not final_output_dir.exists():
+            print('=> creating {}'.format(final_output_dir))
+            final_output_dir.mkdir(parents=True)
+
+        final_log_file = final_output_dir / log_file
         head = '%(asctime)-15s %(message)s'
         logging.basicConfig(filename=str(final_log_file),
                             format=head)
@@ -91,7 +92,7 @@ def get_optimizer(cfg, model):
     elif cfg.TRAIN.OPTIMIZER == 'adam':
         optimizer = optim.Adam(
             filter(lambda p: p.requires_grad, model.parameters()),
-            #model.parameters(),
+            # model.parameters(),
             lr=cfg.TRAIN.LR0,
             betas=(cfg.TRAIN.MOMENTUM, 0.999)
         )
@@ -102,13 +103,13 @@ def get_optimizer(cfg, model):
 def save_checkpoint(epoch, name, model, optimizer, output_dir, filename, is_best=False):
     model_state = model.module.state_dict() if is_parallel(model) else model.state_dict()
     checkpoint = {
-            'epoch': epoch,
-            'model': name,
-            'state_dict': model_state,
-            # 'best_state_dict': model.module.state_dict(),
-            # 'perf': perf_indicator,
-            'optimizer': optimizer.state_dict(),
-        }
+        'epoch': epoch,
+        'model': name,
+        'state_dict': model_state,
+        # 'best_state_dict': model.module.state_dict(),
+        # 'perf': perf_indicator,
+        'optimizer': optimizer.state_dict(),
+    }
     torch.save(checkpoint, os.path.join(output_dir, filename))
     if is_best and 'state_dict' in checkpoint:
         torch.save(checkpoint['best_state_dict'],
@@ -124,7 +125,7 @@ def initialize_weights(model):
             m.eps = 1e-3
             m.momentum = 0.03
         elif t in [nn.Hardswish, nn.LeakyReLU, nn.ReLU, nn.ReLU6]:
-        # elif t in [nn.LeakyReLU, nn.ReLU, nn.ReLU6]:
+            # elif t in [nn.LeakyReLU, nn.ReLU, nn.ReLU6]:
             m.inplace = True
 
 
@@ -149,8 +150,10 @@ def time_synchronized():
 
 class DataLoaderX(DataLoader):
     """prefetch dataloader"""
+
     def __iter__(self):
         return BackgroundGenerator(super().__iter__())
+
 
 @contextmanager
 def torch_distributed_zero_first(local_rank: int):

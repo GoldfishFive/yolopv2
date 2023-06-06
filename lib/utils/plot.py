@@ -37,11 +37,13 @@ def show_seg_result(img, result, index, epoch, save_dir=None, is_ll=False,palett
     
     if not is_demo:
         color_seg = np.zeros((result.shape[0], result.shape[1], 3), dtype=np.uint8)
+        img = cv2.resize(img, (result.shape[1], result.shape[0]), interpolation=cv2.INTER_LINEAR)
         for label, color in enumerate(palette):
             color_seg[result == label, :] = color
     else:
         color_area = np.zeros((result[0].shape[0], result[0].shape[1], 3), dtype=np.uint8)
-        
+        img = cv2.resize(img, (result[0].shape[1], result[0].shape[0]), interpolation=cv2.INTER_LINEAR)
+
         # for label, color in enumerate(palette):
         #     color_area[result[0] == label, :] = color
 
@@ -58,7 +60,6 @@ def show_seg_result(img, result, index, epoch, save_dir=None, is_ll=False,palett
     img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
     # img = img * 0.5 + color_seg * 0.5
     img = img.astype(np.uint8)
-    img = cv2.resize(img, (1280,720), interpolation=cv2.INTER_LINEAR)
 
     if not is_demo:
         if not is_gt:

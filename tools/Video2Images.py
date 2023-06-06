@@ -164,6 +164,12 @@ def get_sunny_images():
                 pass
             else:
                 break
+def testyacs():
+    from yacs.config import CfgNode as CN
+    yaml_name='../lib/config/YOLOPv2.yaml'
+    fcfg = open(yaml_name)
+    cfg = CN.load_cfg(fcfg)
+
 
 if __name__ == "__main__":
     # samples_video2images()
@@ -177,5 +183,6 @@ if __name__ == "__main__":
     #     print("python test_PReNet.py --logdir logs/Rain100H/PReNet6 \
     #      --save_path results/PReNet/{} --data_path /home/data/highway/0095/rainy_image_list/{}".format(i,i))
 
-    get_sunny_images()
+    # get_sunny_images()
+    testyacs()
     pass

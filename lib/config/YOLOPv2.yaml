@@ -1,4 +1,6 @@
+exp_name: '3_class_for_road_segment'
 num_seg_class: 3
+GPUS: (0,1)
 MODEL:
     NAME: 'YOLOPv2'
 DATASET:
@@ -9,7 +11,8 @@ DATASET:
 
 TRAIN:
     END_EPOCH: 100
-    BATCH_SIZE_PER_GPU: 16
+    BATCH_SIZE_PER_GPU: 32
+    VAL_FREQ: 1
 
 TEST:
     BATCH_SIZE_PER_GPU: 8
